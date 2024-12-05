@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:managertimemob/db/DatabaseHelper.dart';
 
+import 'dashboard.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -25,7 +27,14 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      final userDaAggiungere = await FirebaseDatabaseHelper.getUtentebyEmail(_emailController.text.trim());
+      var userDaAggiungere = await FirebaseDatabaseHelper.getUtentebyEmail(_emailController.text.trim());
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Dashboard(userDaAggiungere),
+        ),
+      );
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login effettuato con successo!')),
