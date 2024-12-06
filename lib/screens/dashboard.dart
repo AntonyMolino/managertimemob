@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import 'entrateUscite.dart';
+
 
 class Dashboard extends StatefulWidget {
   final Map<String, dynamic>? dipendente; // Campo dipendente passato dal genitore.
@@ -133,7 +135,12 @@ class _DashboardState extends State<Dashboard> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EntrateUscitePage(dipendente),
+                  ),
+                );
 
 
                 ScaffoldMessenger.of(context).showSnackBar(

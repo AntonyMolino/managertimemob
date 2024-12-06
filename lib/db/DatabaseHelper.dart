@@ -70,6 +70,55 @@ class FirebaseDatabaseHelper {
       return false;
     }
   }
+  static Future<List<Map<String, dynamic>>> getEntrate(int dipendenteId) async {
+    if (dipendenteId <= 0) {
+      print("ID dipendente non valido.");
+      return [];
+    }
+    try {
+      final querySnapshot = await _firestore
+          .collection('Entrate')
+          .where('dipendenteEntr', isEqualTo: dipendenteId)
+          .orderBy('data', descending: true)
+          .get();
+
+      return querySnapshot.docs.map((doc) => {
+        'id': doc.id, // Include anche l'ID del documento
+        ...doc.data(), // Include i dati
+      }).toList();
+    } catch (e) {
+      print("Errore durante il recupero delle entrate: $e");
+      return [];
+    }
+  }
+
+  static Future<Map<String, dynamic>?> getUscitaByEntrataId(int entrataId) async {
+    if (entrataId <= 0) {
+      print("ID entrata non valido.");
+      return null;
+    }
+    try {
+      final querySnapshot = await _firestore
+          .collection('Uscite')
+          .where('entrataId', isEqualTo: entrataId)
+          .limit(1) // Limitiamo a una sola uscita
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final doc = querySnapshot.docs.first;
+        return {
+          'id': doc.id, // Include l'ID del documento
+          ...doc.data(), // Include i dati
+        };
+      } else {
+        print("Nessuna uscita trovata per entrataId $entrataId.");
+        return null;
+      }
+    } catch (e) {
+      print('Errore durante il recupero delle uscite: $e');
+      return null;
+    }
+  }
 
 
   // static Future<Map<String, dynamic>?> aggiungiUtenteAuth(String email){
